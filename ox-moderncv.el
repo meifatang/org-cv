@@ -192,6 +192,19 @@ as a communication channel."
             (alist-get 'location entry)
             note contents)))
 
+(defun org-moderncv--format-cvschool (headline contents info)
+  "Format HEADLINE as cvschool."
+  (let* ((entry (org-cv-utils--parse-cvschool headline info))
+	 (note (or (org-element-property :NOTE headline) "")))
+
+    (format "\\cventry{\\textbf{%s}}{%s}{%s}{%s}{%s}{%s}\n"
+            (org-cv-utils--format-time-window (alist-get 'from-date entry)
+                                              (alist-get 'to-date entry))
+            (alist-get 'title entry)
+            (alist-get 'school entry)
+            (alist-get 'location entry)
+            note contents)))
+
 (defun org-moderncv-headline (headline contents info)
   "Transcode HEADLINE element into moderncv code.
 CONTENTS is the contents of the headline.  INFO is a plist used
@@ -203,6 +216,8 @@ as a communication channel."
        ;; is a cv entry
        ((equal environment "cventry")
         (org-moderncv--format-cventry headline contents info))
+       ((equal environment "cvschool")
+	(org-moderncv--format-cvschool headline contents info))
        ((org-export-with-backend 'latex headline contents info))))))
 
 ;;;###autoload

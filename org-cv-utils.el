@@ -64,11 +64,21 @@ If both dates are the same, return just FROM-DATE"
 INFO is a plist used
 as a communication channel."
   (let ((title (org-export-data (org-element-property :title headline) info)))
-    `((title . ,title)
+    `((title . ,(or title ""))
       (from-date . ,(or (org-element-property :FROM headline)
-                      (error "No FROM property provided for cventry %s" title)))
+			(error "No FROM property provided for cventry %s" title)))
       (to-date . ,(org-element-property :TO headline))
       (employer . ,(org-element-property :EMPLOYER headline))
+      (location . ,(or (org-element-property :LOCATION headline) "")))))
+
+(defun org-cv-utils--parse-cvschool (headline info)
+  "Return alist describing the entry"
+  (let ((title (org-export-data (org-element-property :title headline) info)))
+    `((title . ,title)
+      (from-date . ,(or (org-element-property :FROM headline)
+			(error "NO FROM property provided for cvschool %s" title)))
+      (to-date . ,(org-element-property :TO headline))
+      (school . ,(org-element-property :SCHOOL headline))
       (location . ,(or (org-element-property :LOCATION headline) "")))))
 
 (provide 'org-cv-utils)
